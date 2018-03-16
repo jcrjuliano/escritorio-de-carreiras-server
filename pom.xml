@@ -1,0 +1,411 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>br.gov.sp.fatec</groupId>
+	<artifactId>escritorio-de-carreiras-server</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.8.RELEASE</version>
+	</parent>
+
+	<developers>
+		<developer>
+			<name>Juliano Rosa</name>
+			<organization>Faculdade de Tecnologia - FATEC - Jessen Vidal</organization>
+			<organizationUrl>http://fatecsjc.azurewebsites.net</organizationUrl>
+			<email>jcrjuliano@gmai.com</email>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Marcelo Inacio</name>
+			<organization>Faculdade de Tecnologia - FATEC - Jessen Vidal</organization>
+			<organizationUrl>http://fatecsjc.azurewebsites.net</organizationUrl>
+			<email>marcelo.silva135@fatec.sp.gov.br</email>
+			<roles>
+				<role>Java Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.surefire.version>2.19.1</maven.surefire.version>
+
+		<!-- LIQUIBASE -->
+		<liquibase-maven-plugin.version>3.4.1</liquibase-maven-plugin.version>
+		<liquibase.verbose>true</liquibase.verbose>
+		<exclude.tests>nothing-to-exclude</exclude.tests>
+
+		<datasource.driver>com.mysql.jdbc.Driver</datasource.driver>
+		<datasource.username>ecarreiras</datasource.username>
+		<datasource.password>ecarreiras</datasource.password>
+		<datasource.dropAll>true</datasource.dropAll>
+		<datasource.skip>false</datasource.skip>
+		<datasource.promptOnNonLocalDatabase>false</datasource.promptOnNonLocalDatabase>
+
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- DATABASE -->
+		<mysql.version>5.1.38</mysql.version>
+		<hsqldb.version>2.3.4</hsqldb.version>
+
+		<!-- SONAR -->
+		<sonar.language>java</sonar.language>
+		<maven-project-info-reports-plugin.version>2.9</maven-project-info-reports-plugin.version>
+		<cobertura.version>2.1.1</cobertura.version>
+	</properties>
+
+	<dependencies>
+		<!-- SPRINT BOOT -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.hibernate</groupId>
+					<artifactId>hibernate-entitymanager</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- TEST -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.19</version>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>2.5.2</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>stax</groupId>
+					<artifactId>stax-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JSON Assert -->
+		<dependency>
+			<groupId>org.skyscreamer</groupId>
+			<artifactId>jsonassert</artifactId>
+			<version>1.5.0</version>
+		</dependency>
+
+		<!-- JWT -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>4.27</version>
+		</dependency>
+
+		<!-- JSON PARSER -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
+		<!-- SERVLET -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+		</dependency>
+
+		<!-- ECLIPSE LINK -->
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.6.4</version>
+		</dependency>
+
+		<!-- MySQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
+		</dependency>
+
+		<!-- HSQLDB -->
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>${hsqldb.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- POI-Manipulacao arquivos MS Excel -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.14</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>3.14</version>
+		</dependency>
+
+		<!-- LOMBOK -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.logback-extensions</groupId>
+			<artifactId>logback-ext-spring</artifactId>
+			<version>0.1.4</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<!-- COMANDOS PARA RODAR SONAR -->
+			<!-- mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install -Dmaven.test.failure.ignore=true -->
+			<!-- mvn sonar:sonar -->
+			<id>sonar</id>
+			<properties>
+				<sonar.projectName>Escritorio de Carreiras</sonar.projectName>
+				<sonar.junit.reportsPath>/target/surefire-reports</sonar.junit.reportsPath>
+				<sonar.language>java</sonar.language>
+				<!-- Optional URL to server. Default value is http://localhost:9000 -->
+				<sonar.host.url>http://127.0.0.1:9000</sonar.host.url>
+				<sonar.jacoco.reportPath>${project.build.directory}/jacoco.exec</sonar.jacoco.reportPath>
+				<sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
+				<sonar.coverage.exclusions>
+					**/config/*.java,
+					**/jwt/*.java,
+					**/authentication/*.java
+				</sonar.coverage.exclusions>
+				<sonar.exclusions>
+					**/config/*.java,
+					**/jwt/*.java,
+					**/authentication/*.java
+					**/config/*.java,
+					**/test/*.java
+				</sonar.exclusions>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<datasource.url>jdbc:hsqldb:mem:ecarreiras</datasource.url>
+				<datasource.driver>org.hsqldb.jdbcDriver</datasource.driver>
+				<datasource.username>sa</datasource.username>
+				<datasource.password></datasource.password>
+				<datasource.dropAll>true</datasource.dropAll>
+			</properties>
+		</profile>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<id>local</id>
+			<properties>
+				<spring.profiles.active>local</spring.profiles.active>
+				<datasource.url>jdbc:mysql://127.0.0.1:3306/ecarreiras</datasource.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>azure-prd</id>
+			<properties>
+				<spring.profiles.active>azure-prd</spring.profiles.active>
+				<datasource.url>jdbc:mysql://191.232.161.50:3306/ecarreiras</datasource.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>azure-qas</id>
+			<properties>
+				<spring.profiles.active>azure-qas</spring.profiles.active>
+				<datasource.url>jdbc:mysql://104.41.26.21:3306/ecarreiras</datasource.url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>escritorio-de-carreiras-server</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<encoding>ISO-8859-1</encoding>
+					<source>1.8</source>
+					<target>1.8</target>
+					<executable>${env.JAVA_HOME}/bin/javac</executable>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+					<optimize>true</optimize>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.10</version>
+				<configuration>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>liquibase-maven-plugin</artifactId>
+				<groupId>org.liquibase</groupId>
+				<version>${liquibase-maven-plugin.version}</version>
+				<configuration>
+					<changeLogFile>src/main/resources/db/changelog/db.master.xml</changeLogFile>
+					<driver>${datasource.driver}</driver>
+					<url>${datasource.url}</url>
+					<username>${datasource.username}</username>
+					<password>${datasource.password}</password>
+					<promptOnNonLocalDatabase>${datasource.promptOnNonLocalDatabase}</promptOnNonLocalDatabase>
+					<migrationSqlOutputFile>${project.build.directory}/liquibase/PATCH_${timestamp}.sql</migrationSqlOutputFile>
+					<verbose>${liquibase.verbose}</verbose>
+					<dropFirst>${datasource.dropAll}</dropFirst>
+					<databaseChangeLogTableName>DATABASECHANGELOG</databaseChangeLogTableName>
+					<databaseChangeLogLockTableName>DATABASECHANGELOGLOCK</databaseChangeLogLockTableName>
+				</configuration>
+				<executions>
+					<execution>
+						<id>liquibase-install</id>
+						<phase>install</phase>
+						<goals>
+							<goal>update</goal>
+						</goals>
+						<configuration>
+							<url>${datasource.url}</url>
+							<username>${datasource.username}</username>
+							<password>${datasource.password}</password>
+							<contexts>${datasource.contexts}</contexts>
+							<skip>${datasource.skip}</skip>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql.version}</version>
+					</dependency>
+					<dependency>
+						<groupId>org.hsqldb</groupId>
+						<artifactId>hsqldb</artifactId>
+						<version>${hsqldb.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.2</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<reporting>
+		<excludeDefaults>true</excludeDefaults>
+		<outputDirectory>${project.build.directory}/site</outputDirectory>
+		<plugins>
+			<!-- Configures the projects-info-reports plugin. Why: Reduce the time 
+				consumed considerably by removing the need to acquire dependency details 
+				and locations. Used: Site lifecycle, mvn site. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin.version}</version>
+				<configuration>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+			</plugin>
+			<!-- integrate maven-cobertura-plugin to project site -->
+			<plugin>
+				<groupId>net.sourceforge.cobertura</groupId>
+				<artifactId>cobertura</artifactId>
+				<version>${cobertura.version}</version>
+				<configuration>
+					<formats>
+						<format>html</format>
+					</formats>
+					<instrumentation>
+						<ignores>
+							<ignore>br.gov.sp.fatec.ecarreiras.config.*</ignore>
+						</ignores>
+						<excludes>
+							<exclude>**/authentication/*.class</exclude>
+							<exclude>**/jwt/*.class</exclude>
+							<exclude>**/config/*.class</exclude>
+							<exclude>**/test/*.class</exclude>
+						</excludes>
+					</instrumentation>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	<repositories>
+		<repository>
+			<id>spring-libs-release</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/libs-release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>
